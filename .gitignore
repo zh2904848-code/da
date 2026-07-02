@@ -1,1 +1,3 @@
 *.psd
+.dbg/
+debug-*.md

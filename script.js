@@ -2,6 +2,12 @@ const stage = document.querySelector("#stage");
 const shown = new Set();
 let activeAction = null;
 let sequenceTimers = [];
+let currentAudio = null;
+let actionAudio = null;
+let backgroundAudio = null;
+let backgroundStarted = false;
+const backgroundVolume = 0.35;
+const duckedBackgroundVolume = 0.12;
 
 const revealMap = {
   "bubble-xiaohong": {
@@ -57,17 +63,6 @@ const flowOrder = [
   "erase",
 ];
 
-const hitZones = [
-  { action: "bubble-boy", x: 15.7, y: 42.2, w: 7.8, h: 11.5 },
-  { action: "bag", x: 26.6, y: 84.1, w: 8.6, h: 14.8 },
-  { action: "scroll", x: 3.5, y: 0.8, w: 5.5, h: 8.5 },
-  { action: "phone", x: 12.1, y: 44.0, w: 8.4, h: 12.5 },
-  { action: "bubble-xiaohong", x: 55.6, y: 51.8, w: 8.8, h: 12.5 },
-  { action: "erase", x: 42.0, y: 61.0, w: 7.5, h: 10.5 },
-  { action: "bag", x: 40.4, y: 81.5, w: 8.4, h: 12.5 },
-  { action: "bubble-right", x: 74.3, y: 44.0, w: 15.2, h: 18.5 },
-];
-
 const bubbleRightSequence = [
   ".bubble-right-step-1",
   ".bubble-right-step-2",
@@ -115,6 +110,96 @@ const bubbleBoySequence = [
   ".bubble-boy-step-38",
 ];
 
+const audioFileMap = {
+  "bubble-right": "要不要帮她？好可怜。.mp3",
+  "bubble-xiaohong": "为什么你们要这样对我。.mp3",
+  "bubble-boy": "从你自己的身上找原因吧，就看你不顺眼。.mp3",
+};
+
+const warmImageSelectors = [
+  ".summary-1",
+  ".reveal-new",
+  ".reveal-bag",
+  ".ui-phone-chat",
+  ".ui-panel-question-text",
+  ".scroll-opened",
+  ".bubble-xiaohong-bg",
+  ".bubble-xiaohong-seq",
+  ".bubble-right-bg",
+  ".bubble-right-seq",
+  ".bubble-boy-bg",
+  ".bubble-boy-seq",
+  ".effect-mist",
+  ".effect-hands",
+];
+
+const preloadedActionAudios = [];
+
+function ensureBackgroundAudio() {
+  if (backgroundAudio) return backgroundAudio;
+  const audio = new Audio(encodeURI("./23/背景音乐2.mp3"));
+  audio.preload = "auto";
+  audio.loop = true;
+  audio.volume = backgroundVolume;
+  backgroundAudio = audio;
+  return audio;
+}
+
+function ensureActionAudio() {
+  if (actionAudio) return actionAudio;
+  const audio = new Audio();
+  audio.preload = "auto";
+  audio.disableRemotePlayback = true;
+  actionAudio = audio;
+  return audio;
+}
+
+function warmImageElement(img) {
+  if (!img || !img.src) return;
+  if (img.complete && img.decode) {
+    img.decode().catch(() => {});
+    return;
+  }
+  img.addEventListener("load", () => {
+    img.decode?.().catch(() => {});
+  }, { once: true });
+}
+
+function warmInteractiveImages() {
+  warmImageSelectors.forEach((selector) => {
+    document.querySelectorAll(selector).forEach((el) => warmImageElement(el));
+  });
+}
+
+function warmInteractiveAudios() {
+  Object.values(audioFileMap).forEach((fileName) => {
+    const audio = new Audio(encodeURI(`./23/${fileName}`));
+    audio.preload = "auto";
+    audio.load();
+    preloadedActionAudios.push(audio);
+  });
+}
+
+function preloadInteractiveAssets() {
+  warmInteractiveImages();
+  warmInteractiveAudios();
+}
+
+function startBackgroundAudio() {
+  if (backgroundStarted) return;
+  const audio = ensureBackgroundAudio();
+  audio.play().then(() => {
+    backgroundStarted = true;
+  }).catch(() => {
+    backgroundStarted = false;
+  });
+}
+
+function setBackgroundVolume(volume) {
+  if (!backgroundAudio) return;
+  backgroundAudio.volume = volume;
+}
+
 function show(sel) {
   const el = document.querySelector(sel);
   if (el) el.classList.add("is-visible");
@@ -159,6 +244,41 @@ function playImageSequence(selectors, stepDelay = 110) {
   selectors.forEach((sel, index) => {
     const timerId = window.setTimeout(() => show(sel), index * stepDelay);
     sequenceTimers.push(timerId);
+  });
+}
+
+function stopCurrentAudio() {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio.removeAttribute("src");
+    currentAudio.load();
+    currentAudio = null;
+  }
+  setBackgroundVolume(backgroundVolume);
+}
+
+function playActionAudio(action) {
+  stopCurrentAudio();
+  const fileName = audioFileMap[action];
+  if (!fileName) return;
+  const audio = ensureActionAudio();
+  audio.src = encodeURI(`./23/${fileName}`);
+  currentAudio = audio;
+  setBackgroundVolume(duckedBackgroundVolume);
+  audio.onended = () => {
+    if (currentAudio === audio) {
+      currentAudio = null;
+      audio.removeAttribute("src");
+      audio.load();
+      setBackgroundVolume(backgroundVolume);
+    }
+  };
+  audio.play().catch(() => {
+    if (currentAudio === audio) {
+      currentAudio = null;
+      setBackgroundVolume(backgroundVolume);
+    }
   });
 }
 
@@ -218,14 +338,23 @@ function trigger(action) {
     // Show bubble after crossfade
     window.setTimeout(() => {
       show(body[0]);
-      window.setTimeout(() => playImageSequence(bubbleXiaohongSequence, 90), 220);
+      window.setTimeout(() => {
+        playActionAudio(action);
+        playImageSequence(bubbleXiaohongSequence, 90);
+      }, 220);
     }, 500);
   } else if (action === "bubble-right") {
     show(body[0]);
-    window.setTimeout(() => playImageSequence(bubbleRightSequence, 90), 220);
+    window.setTimeout(() => {
+      playActionAudio(action);
+      playImageSequence(bubbleRightSequence, 90);
+    }, 220);
   } else if (action === "bubble-boy") {
     show(body[0]);
-    window.setTimeout(() => playImageSequence(bubbleBoySequence, 90), 220);
+    window.setTimeout(() => {
+      playActionAudio(action);
+      playImageSequence(bubbleBoySequence, 90);
+    }, 220);
   } else if (body.length === 2) {
     show(body[0]);
     window.setTimeout(() => show(body[1]), 520);
@@ -243,14 +372,6 @@ function trigger(action) {
   }
 }
 
-function actionFromPoint(clientX, clientY) {
-  const rect = stage.getBoundingClientRect();
-  const x = ((clientX - rect.left) / rect.width) * 100;
-  const y = ((clientY - rect.top) / rect.height) * 100;
-  const zone = hitZones.find((item) => x >= item.x && x <= item.x + item.w && y >= item.y && y <= item.y + item.h);
-  return zone?.action || null;
-}
-
 stage.addEventListener("pointerdown", (event) => {
   if (activeAction && !event.target.closest?.(".hotspot")) {
     event.preventDefault();
@@ -258,9 +379,10 @@ stage.addEventListener("pointerdown", (event) => {
     return;
   }
   const button = event.target.closest?.(".hotspot");
-  const action = button?.dataset.action || actionFromPoint(event.clientX, event.clientY);
+  const action = button?.dataset.action;
   if (!action) return;
   event.preventDefault();
+  event.stopPropagation(); // 阻止事件冒泡，防止触发多次
   trigger(action);
 }, true);
 
@@ -284,15 +406,12 @@ window.addEventListener("pointerdown", (event) => {
     closePopups();
     return;
   }
-  if (event.target.closest?.(".stage")) return;
-  const action = actionFromPoint(event.clientX, event.clientY);
-  if (!action) return;
-  event.preventDefault();
-  trigger(action);
+  // Remove duplicate trigger logic from global listener
 }, true);
 
 function closePopups() {
   clearSequenceTimers();
+  stopCurrentAudio();
   document.querySelectorAll(".ui-phone-chat, .reveal-new, .reveal-bag, .scroll-opened, .ui-panel-question-text, .bubble-xiaohong-bg, .bubble-xiaohong-seq, .bubble-right-bg, .bubble-right-seq, .bubble-boy-bg, .bubble-boy-seq, .effect-mist, .effect-hands, .base-doodle, .summary-1").forEach((el) => {
     el.classList.remove("is-visible");
   });
@@ -307,3 +426,21 @@ function closePopups() {
   });
   activeAction = null;
 }
+
+// Best-effort autoplay for background music on page entry.
+window.addEventListener("load", () => {
+  const warmUp = () => preloadInteractiveAssets();
+  if ("requestIdleCallback" in window) {
+    window.requestIdleCallback(warmUp, { timeout: 1200 });
+  } else {
+    window.setTimeout(warmUp, 180);
+  }
+}, { once: true });
+
+startBackgroundAudio();
+window.addEventListener("pageshow", () => {
+  startBackgroundAudio();
+});
+window.addEventListener("pointerdown", () => {
+  if (!backgroundStarted) startBackgroundAudio();
+}, { once: true, capture: true });
