@@ -1,9 +1,14 @@
 :root {
   --art-w: 5337;
   --art-h: 3300;
-  --stage-w: min(100vw, calc(100svh * var(--art-w) / var(--art-h)));
+  --viewport-h: 100vh;
+  --stage-w: min(100vw, calc(var(--viewport-h) * var(--art-w) / var(--art-h)));
   --stage-h: calc(var(--stage-w) * var(--art-h) / var(--art-w));
   --scene-scale: 0.95; /* Increased from 0.82 to reduce border thickness */
+}
+
+@supports (height: 100svh) {
+  :root { --viewport-h: 100svh; }
 }
 
 * { box-sizing: border-box; }
@@ -20,7 +25,7 @@ html, body {
 .app, .stage-shell {
   position: relative;
   width: 100vw;
-  height: 100svh;
+  height: var(--viewport-h);
   overflow: hidden;
 }
 
