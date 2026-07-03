@@ -271,3 +271,27 @@ html, body {
     animation: none;
   }
 }
+
+@media (pointer: coarse), (max-width: 768px) {
+  .char-girl-sitting,
+  .char-boy-sitting,
+  .char-xiaohong,
+  .char-xiaohong-2,
+  .char-girl-ponytail,
+  .char-girl-short-hair,
+  .char-observer,
+  .btn-summary,
+  .hotspot::after {
+    animation: none;
+  }
+
+  .char-girl-sitting,
+  .char-boy-sitting,
+  .char-xiaohong,
+  .char-xiaohong-2,
+  .char-girl-ponytail,
+  .char-girl-short-hair,
+  .char-observer {
+    will-change: auto;
+  }
+}

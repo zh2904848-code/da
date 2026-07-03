@@ -116,8 +116,6 @@ const audioFileMap = {
   "bubble-boy": "voice-blame.mp3",
 };
 
-const preloadedActionAudios = [];
-
 function ensureBackgroundAudio() {
   if (backgroundAudio) return backgroundAudio;
   const audio = new Audio(encodeURI("./23/背景音乐2.mp3"));
@@ -146,19 +144,6 @@ function warmImageElement(img) {
   img.addEventListener("load", () => {
     img.decode?.().catch(() => {});
   }, { once: true });
-}
-
-function warmInteractiveAudios() {
-  Object.values(audioFileMap).forEach((fileName) => {
-    const audio = new Audio(encodeURI(`./23/${fileName}`));
-    audio.preload = "auto";
-    audio.load();
-    preloadedActionAudios.push(audio);
-  });
-}
-
-function preloadInteractiveAssets() {
-  warmInteractiveAudios();
 }
 
 function loadLazyImage(el) {
@@ -412,15 +397,7 @@ function closePopups() {
   activeAction = null;
 }
 
-window.addEventListener("load", () => {
-  const warmUp = () => preloadInteractiveAssets();
-  if ("requestIdleCallback" in window) {
-    window.requestIdleCallback(warmUp, { timeout: 1200 });
-  } else {
-    window.setTimeout(warmUp, 180);
-  }
-}, { once: true });
-
 window.addEventListener("pointerdown", () => {
-  if (!backgroundStarted) startBackgroundAudio();
+  if (window.matchMedia?.("(pointer: coarse)").matches) return;
+  if (!backgroundStarted) window.setTimeout(startBackgroundAudio, 800);
 }, { once: true, capture: true });
