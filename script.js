@@ -116,29 +116,12 @@ const audioFileMap = {
   "bubble-boy": "从你自己的身上找原因吧，就看你不顺眼。.mp3",
 };
 
-const warmImageSelectors = [
-  ".summary-1",
-  ".reveal-new",
-  ".reveal-bag",
-  ".ui-phone-chat",
-  ".ui-panel-question-text",
-  ".scroll-opened",
-  ".bubble-xiaohong-bg",
-  ".bubble-xiaohong-seq",
-  ".bubble-right-bg",
-  ".bubble-right-seq",
-  ".bubble-boy-bg",
-  ".bubble-boy-seq",
-  ".effect-mist",
-  ".effect-hands",
-];
-
 const preloadedActionAudios = [];
 
 function ensureBackgroundAudio() {
   if (backgroundAudio) return backgroundAudio;
   const audio = new Audio(encodeURI("./23/背景音乐2.mp3"));
-  audio.preload = "auto";
+  audio.preload = "none";
   audio.loop = true;
   audio.volume = backgroundVolume;
   backgroundAudio = audio;
@@ -165,12 +148,6 @@ function warmImageElement(img) {
   }, { once: true });
 }
 
-function warmInteractiveImages() {
-  warmImageSelectors.forEach((selector) => {
-    document.querySelectorAll(selector).forEach((el) => warmImageElement(el));
-  });
-}
-
 function warmInteractiveAudios() {
   Object.values(audioFileMap).forEach((fileName) => {
     const audio = new Audio(encodeURI(`./23/${fileName}`));
@@ -181,8 +158,13 @@ function warmInteractiveAudios() {
 }
 
 function preloadInteractiveAssets() {
-  warmInteractiveImages();
   warmInteractiveAudios();
+}
+
+function loadLazyImage(el) {
+  if (!el || !el.dataset?.src || el.src) return;
+  el.src = el.dataset.src;
+  warmImageElement(el);
 }
 
 function startBackgroundAudio() {
@@ -202,7 +184,10 @@ function setBackgroundVolume(volume) {
 
 function show(sel) {
   const el = document.querySelector(sel);
-  if (el) el.classList.add("is-visible");
+  if (el) {
+    loadLazyImage(el);
+    el.classList.add("is-visible");
+  }
 }
 
 function stopMotion(sel) {
@@ -427,7 +412,6 @@ function closePopups() {
   activeAction = null;
 }
 
-// Best-effort autoplay for background music on page entry.
 window.addEventListener("load", () => {
   const warmUp = () => preloadInteractiveAssets();
   if ("requestIdleCallback" in window) {
@@ -437,10 +421,6 @@ window.addEventListener("load", () => {
   }
 }, { once: true });
 
-startBackgroundAudio();
-window.addEventListener("pageshow", () => {
-  startBackgroundAudio();
-});
 window.addEventListener("pointerdown", () => {
   if (!backgroundStarted) startBackgroundAudio();
 }, { once: true, capture: true });
