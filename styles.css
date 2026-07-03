@@ -191,14 +191,14 @@ html, body {
   box-shadow: 0 0 0 14px rgba(255, 255, 255, 0.15);
 }
 
-.hotspot-xiaohong { left: calc(53.8% + 100px); top: calc(53.4% + 180px); width: 7.5%; height: 9.0%; }
-.hotspot-girl-short { left: calc(82.2% - 70px); top: calc(40.8% + 50px); width: 11.0%; height: 14.5%; }
-.hotspot-girl-sitting { left: calc(15.6% + 60px); top: calc(41.8% + 200px); width: 7.5%; height: 8.8%; }
-.hotspot-backpack { left: 39.8%; top: calc(72.8% + 80px); width: 8.2%; height: 12.5%; }
-.hotspot-boy { left: 13.0%; top: calc(47.5% + 245px); width: 7.8%; height: 10.0%; }
-.hotspot-table { left: calc(41.8% + 20px); top: calc(61.8% + 50px); width: 6.5%; height: 9.5%; }
+.hotspot-xiaohong { left: 55.67%; top: 58.85%; width: 7.5%; height: 9.0%; }
+.hotspot-girl-short { left: 80.89%; top: 42.32%; width: 11.0%; height: 14.5%; }
+.hotspot-girl-sitting { left: 16.72%; top: 47.86%; width: 7.5%; height: 8.8%; }
+.hotspot-backpack { left: 39.8%; top: 75.22%; width: 8.2%; height: 12.5%; }
+.hotspot-boy { left: 13.0%; top: 54.92%; width: 7.8%; height: 10.0%; }
+.hotspot-table { left: 42.17%; top: 63.32%; width: 6.5%; height: 9.5%; }
 .hotspot-new { left: 61.8%; top: 51.2%; width: 6.2%; height: 8.6%; }
-.hotspot-scroll { left: calc(1.0% + 50px); top: 0.8%; width: 5.5%; height: 8.5%; }
+.hotspot-scroll { left: 1.94%; top: 0.8%; width: 5.5%; height: 8.5%; }
 
 /* 卷轴相关样式 */
 .scroll-closed {
