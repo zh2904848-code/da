@@ -1,4 +1,11 @@
 {
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/h5-mobile/",
+      "permanent": false
+    }
+  ],
   "headers": [
     {
       "source": "/",
