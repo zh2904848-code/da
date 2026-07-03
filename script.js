@@ -111,9 +111,9 @@ const bubbleBoySequence = [
 ];
 
 const audioFileMap = {
-  "bubble-right": "要不要帮她？好可怜。.mp3",
-  "bubble-xiaohong": "为什么你们要这样对我。.mp3",
-  "bubble-boy": "从你自己的身上找原因吧，就看你不顺眼。.mp3",
+  "bubble-right": "voice-help.mp3",
+  "bubble-xiaohong": "voice-why.mp3",
+  "bubble-boy": "voice-blame.mp3",
 };
 
 const preloadedActionAudios = [];
