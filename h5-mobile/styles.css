@@ -18,7 +18,7 @@ html, body {
   height: 100%;
   margin: 0;
   overflow: hidden;
-  background: #f7f1e8; /* Restored original cream background */
+  background: #d8cbb8;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
 }
 
@@ -27,6 +27,23 @@ html, body {
   width: 100vw;
   height: var(--viewport-h);
   overflow: hidden;
+}
+
+.app::before {
+  content: "";
+  position: fixed;
+  inset: -24px;
+  z-index: 0;
+  background: url("./23/bg_classroom.webp") center / cover no-repeat;
+  filter: blur(18px);
+  opacity: 0.72;
+  transform: scale(1.06);
+  pointer-events: none;
+}
+
+.stage-shell {
+  z-index: 1;
+  overscroll-behavior: contain;
 }
 
 .clue-counter {
@@ -91,6 +108,73 @@ html, body {
   transform-origin: center;
   will-change: transform;
   contain: layout paint;
+}
+
+@media (orientation: portrait) {
+  :root {
+    --stage-h: var(--viewport-h);
+    --stage-w: calc(var(--stage-h) * var(--art-w) / var(--art-h));
+    --scene-scale: 1;
+  }
+
+  .app {
+    height: var(--viewport-h);
+  }
+
+  .stage-shell {
+    overflow-x: auto;
+    overflow-y: hidden;
+    touch-action: pan-x;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .stage-shell::-webkit-scrollbar {
+    display: none;
+  }
+
+  .stage {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: var(--stage-w);
+    min-width: var(--stage-w);
+    height: var(--stage-h);
+    transform: none;
+  }
+
+  .clue-counter {
+    position: fixed;
+    top: max(10px, env(safe-area-inset-top));
+    right: 10px;
+    max-width: calc(100vw - 20px);
+    padding: 7px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    line-height: 1.35;
+    letter-spacing: 0;
+  }
+
+  .clue-counter span {
+    font-size: 15px;
+    margin: 0 2px;
+  }
+
+  .btn-summary {
+    position: fixed;
+    top: calc(max(10px, env(safe-area-inset-top)) + 42px);
+    right: 10px;
+    width: 48px;
+    height: 48px;
+    border-width: 2px;
+    font-size: 24px;
+  }
+
+  .hotspot::after {
+    width: 24px;
+    height: 24px;
+    border-width: 2px;
+  }
 }
 
 .layer {

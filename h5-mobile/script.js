@@ -1,4 +1,5 @@
 const stage = document.querySelector("#stage");
+const stageShell = document.querySelector(".stage-shell");
 const shown = new Set();
 let activeAction = null;
 let sequenceTimers = [];
@@ -116,6 +117,13 @@ const audioFileMap = {
   "bubble-boy": "voice-blame.mp3",
 };
 const preloadedActionAudios = [];
+
+function centerPortraitStage() {
+  if (!stageShell) return;
+  const isPortrait = window.matchMedia("(orientation: portrait)").matches;
+  if (!isPortrait || stageShell.scrollWidth <= stageShell.clientWidth) return;
+  stageShell.scrollLeft = (stageShell.scrollWidth - stageShell.clientWidth) / 2;
+}
 
 function ensureBackgroundAudio() {
   if (backgroundAudio) return backgroundAudio;
@@ -412,6 +420,7 @@ function closePopups() {
 }
 
 window.addEventListener("load", () => {
+  centerPortraitStage();
   const warmUp = () => preloadInteractiveAssets();
   if ("requestIdleCallback" in window) {
     window.requestIdleCallback(warmUp, { timeout: 1200 });
@@ -419,6 +428,10 @@ window.addEventListener("load", () => {
     window.setTimeout(warmUp, 180);
   }
 }, { once: true });
+
+window.addEventListener("orientationchange", () => {
+  window.requestAnimationFrame(centerPortraitStage);
+});
 
 window.addEventListener("pointerdown", () => {
   if (!backgroundStarted) startBackgroundAudio();
