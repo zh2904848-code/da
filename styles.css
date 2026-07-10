@@ -107,8 +107,8 @@ html, body {
 
 @media (orientation: portrait) {
   :root {
-    --stage-h: 100svh;
-    --stage-w: calc(var(--stage-h) * var(--art-w) / var(--art-h));
+    --stage-w: 100vw;
+    --stage-h: calc(var(--stage-w) * var(--art-h) / var(--art-w));
     --scene-scale: 1;
   }
 
@@ -117,9 +117,9 @@ html, body {
   }
 
   .stage-shell {
-    overflow-x: auto;
+    overflow-x: hidden;
     overflow-y: hidden;
-    touch-action: pan-x;
+    touch-action: manipulation;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
   }
@@ -129,13 +129,13 @@ html, body {
   }
 
   .stage {
-    position: relative;
-    left: auto;
-    top: auto;
+    position: absolute;
+    left: 50%;
+    top: 50%;
     width: var(--stage-w);
     min-width: var(--stage-w);
     height: var(--stage-h);
-    transform: none;
+    transform: translate(-50%, -50%);
   }
 
   .clue-counter {
