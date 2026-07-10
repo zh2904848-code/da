@@ -168,6 +168,16 @@ function preloadInteractiveAssets() {
   warmInteractiveAudios();
 }
 
+function warmIdleImages() {
+  [
+    ".char-xiaohong-2",
+    ".char-observer",
+    ".prop-backpack-gray",
+    ".base-doodle",
+    ".scroll-closed",
+  ].forEach((sel) => loadLazyImage(document.querySelector(sel)));
+}
+
 function loadLazyImage(el) {
   if (!el || !el.dataset?.src || el.src) return;
   el.src = el.dataset.src;
@@ -305,6 +315,7 @@ function trigger(action) {
   }
   const item = revealMap[action];
   if (!item) return;
+  item.stop?.forEach((sel) => loadLazyImage(document.querySelector(sel)));
   if (!shown.has(action)) {
     shown.add(action);
     updateClueCounter();
@@ -421,7 +432,10 @@ function closePopups() {
 
 window.addEventListener("load", () => {
   centerPortraitStage();
-  const warmUp = () => preloadInteractiveAssets();
+  const warmUp = () => {
+    preloadInteractiveAssets();
+    warmIdleImages();
+  };
   if ("requestIdleCallback" in window) {
     window.requestIdleCallback(warmUp, { timeout: 1200 });
   } else {
