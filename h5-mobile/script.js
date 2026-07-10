@@ -7,8 +7,8 @@ let currentAudio = null;
 let actionAudio = null;
 let backgroundAudio = null;
 let backgroundStarted = false;
-const backgroundVolume = 0.35;
-const duckedBackgroundVolume = 0.12;
+const backgroundVolume = 0.18;
+const duckedBackgroundVolume = 0.06;
 
 const revealMap = {
   "bubble-xiaohong": {
