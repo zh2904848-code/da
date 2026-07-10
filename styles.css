@@ -107,8 +107,8 @@ html, body {
 
 @media (orientation: portrait) {
   :root {
-    --stage-w: 100vw;
-    --stage-h: calc(var(--stage-w) * var(--art-h) / var(--art-w));
+    --stage-h: 100vw;
+    --stage-w: calc(var(--stage-h) * var(--art-w) / var(--art-h));
     --scene-scale: 1;
   }
 
@@ -117,6 +117,13 @@ html, body {
   }
 
   .stage-shell {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 100svh;
+    height: 100vw;
+    transform: translate(-50%, -50%) rotate(90deg);
+    transform-origin: center;
     overflow-x: hidden;
     overflow-y: hidden;
     touch-action: manipulation;
