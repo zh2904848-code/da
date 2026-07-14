@@ -7,8 +7,8 @@ let currentAudio = null;
 let actionAudio = null;
 let backgroundAudio = null;
 let backgroundStarted = false;
-const backgroundVolume = 0.18;
-const duckedBackgroundVolume = 0.06;
+const backgroundVolume = 0.10;
+const duckedBackgroundVolume = 0.03;
 
 function lockViewportHeight() {
   const height = window.visualViewport?.height || window.innerHeight;
@@ -325,7 +325,7 @@ function trigger(action) {
   flashHotspot(action);
   
   // Hide hotspots only for specific fullscreen/popup
-  const fullscreenActions = ["new-image", "bag", "phone"];
+  const fullscreenActions = ["new-image", "bag", "phone", "erase"];
   if (fullscreenActions.includes(action)) {
     document.querySelectorAll(".hotspot").forEach(btn => btn.style.display = "none");
   }
