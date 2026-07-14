@@ -1,5 +1,7 @@
 const stage = document.querySelector("#stage");
 const stageShell = document.querySelector(".stage-shell");
+const experienceGate = document.querySelector("#experience-gate");
+const enterExperienceButton = document.querySelector("#btn-enter-experience");
 const shown = new Set();
 let activeAction = null;
 let sequenceTimers = [];
@@ -242,6 +244,16 @@ function preloadNextAction(action) {
   if (index >= 0) scheduleImageGroupPreload(flowOrder[index + 1]);
 }
 
+function enterExperience() {
+  document.body.classList.remove("is-gated");
+  lockViewportHeight();
+  window.setTimeout(() => {
+    lockViewportHeight();
+    centerPortraitStage();
+    scheduleImageGroupPreload(flowOrder[0]);
+  }, 80);
+}
+
 function startBackgroundAudio() {
   if (backgroundStarted) return;
   const audio = ensureBackgroundAudio();
@@ -461,6 +473,18 @@ document.getElementById("btn-summary")?.addEventListener("pointerdown", (event) 
   void trigger("summary");
 });
 
+enterExperienceButton?.addEventListener("pointerdown", (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  enterExperience();
+});
+
+experienceGate?.addEventListener("pointerdown", (event) => {
+  if (event.target === experienceGate) {
+    event.preventDefault();
+  }
+});
+
 window.addEventListener("pointerdown", (event) => {
   if (activeAction === "summary-1-shown") {
     if (event.target.closest("#btn-summary")) return;
@@ -510,6 +534,11 @@ window.addEventListener("orientationchange", () => {
     lockViewportHeight();
     centerPortraitStage();
   }, 250);
+});
+
+window.visualViewport?.addEventListener("resize", () => {
+  lockViewportHeight();
+  centerPortraitStage();
 });
 
 window.addEventListener("pointerdown", () => {
