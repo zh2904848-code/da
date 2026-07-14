@@ -7,7 +7,17 @@
     <link rel="preload" href="./23/bg_classroom.webp" as="image" />
     <link rel="stylesheet" href="./styles.css?v=6" />
   </head>
-  <body>
+  <body class="is-gated">
+    <div class="experience-gate" id="experience-gate" role="dialog" aria-label="横屏体验入口">
+      <div class="gate-panel">
+        <div class="gate-device" aria-hidden="true">
+          <span></span>
+        </div>
+        <h1>横屏互动体验</h1>
+        <p>点击开始后，页面会自动适配当前手机可视区域。</p>
+        <button id="btn-enter-experience" class="gate-button" type="button">开始体验</button>
+      </div>
+    </div>
     <main class="app" aria-label="校园互动场景">
       <section class="stage-shell">
         <div class="stage" id="stage">
@@ -16,18 +26,18 @@
           </div>
           <button id="btn-summary" class="btn-summary" aria-label="查看总结">📖</button>
           
-          <img class="layer bg-layer" src="./23/bg_classroom.webp" alt="" draggable="false" decoding="async" fetchpriority="high" />
-          <img class="layer prop-calendar" src="./23/prop_calendar.webp" alt="" draggable="false" decoding="async" />
-          <img class="layer prop-desks" src="./23/prop_desks.webp" alt="" draggable="false" decoding="async" fetchpriority="high" />
-          <img class="layer prop-backpack-gray" src="./23/prop_backpack_gray.webp" alt="" draggable="false" decoding="async" />
-          <img class="layer base-doodle" src="./23/effect_handwriting.webp" alt="" draggable="false" decoding="async" />
-          <img class="layer char-girl-sitting" src="./23/char_girl_sitting.webp" alt="" draggable="false" decoding="async" />
-          <img class="layer char-boy-sitting" src="./23/char_boy_sitting.webp" alt="" draggable="false" decoding="async" />
-          <img class="layer char-xiaohong" src="./23/char_xiaohong_crying.webp" alt="" draggable="false" decoding="async" />
-          <img class="layer char-xiaohong-2" src="./23/char_xiaohong_crying-2.webp" alt="" draggable="false" decoding="async" />
-          <img class="layer char-girl-ponytail" src="./23/char_girl_ponytail.webp" alt="" draggable="false" decoding="async" />
-          <img class="layer char-girl-short-hair" src="./23/char_girl_short_hair.webp" alt="" draggable="false" decoding="async" />
-          <img class="layer char-observer" src="./23/char_observer.webp" alt="" draggable="false" decoding="async" />
+          <img class="layer bg-layer" src="./23/bg_classroom.webp" alt="" draggable="false" />
+          <img class="layer prop-calendar" src="./23/prop_calendar.webp" alt="" draggable="false" />
+          <img class="layer prop-desks" src="./23/prop_desks.webp" alt="" draggable="false" />
+          <img class="layer prop-backpack-gray" src="./23/prop_backpack_gray.webp" alt="" draggable="false" />
+          <img class="layer base-doodle" src="./23/effect_handwriting.webp" alt="" draggable="false" />
+          <img class="layer char-girl-sitting" src="./23/char_girl_sitting.webp" alt="" draggable="false" />
+          <img class="layer char-boy-sitting" src="./23/char_boy_sitting.webp" alt="" draggable="false" />
+          <img class="layer char-xiaohong" src="./23/char_xiaohong_crying.webp" alt="" draggable="false" />
+          <img class="layer char-xiaohong-2" src="./23/char_xiaohong_crying-2.webp" alt="" draggable="false" />
+          <img class="layer char-girl-ponytail" src="./23/char_girl_ponytail.webp" alt="" draggable="false" />
+          <img class="layer char-girl-short-hair" src="./23/char_girl_short_hair.webp" alt="" draggable="false" />
+          <img class="layer char-observer" src="./23/char_observer.webp" alt="" draggable="false" />
 
           <img class="layer summary summary-1" data-src="./23/summary_1.webp" alt="" draggable="false" />
           <img class="layer reveal reveal-new" data-src="./23/4aff9d6016ca1f5761d8b5b74b927b1f.webp" alt="" draggable="false" />
@@ -83,7 +93,7 @@
           <button class="hotspot hotspot-girl-short" data-action="bubble-right" type="button" aria-label="查看右侧短发女孩对话"></button>
           <button class="hotspot hotspot-girl-sitting" data-action="bubble-boy" type="button" aria-label="查看左侧丸子头女孩对话"></button>
           <button class="hotspot hotspot-new" data-action="new-image" type="button" aria-label="查看新增图片"></button>
-          <img src="./23/ui_panel_question_bg.webp" alt="闭合卷轴" class="scroll-closed" decoding="async" />
+          <img src="./23/ui_panel_question_bg.webp" alt="闭合卷轴" class="scroll-closed" />
           <button class="hotspot hotspot-scroll" data-action="scroll" type="button" aria-label="查看卷轴"></button>
           
           <img data-src="./23/ui_panel_question_text.webp" alt="展开卷轴" class="scroll-opened popup-img" />
@@ -94,6 +104,6 @@
         </div>
       </section>
     </main>
-    <script src="./script.js?v=22"></script>
+    <script src="./script.js?v=23"></script>
   </body>
   </html>
