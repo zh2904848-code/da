@@ -10,6 +10,14 @@ let backgroundStarted = false;
 const backgroundVolume = 0.18;
 const duckedBackgroundVolume = 0.06;
 
+function lockViewportHeight() {
+  const height = window.visualViewport?.height || window.innerHeight;
+  if (height) {
+    document.documentElement.style.setProperty("--viewport-h", `${Math.round(height)}px`);
+  }
+}
+lockViewportHeight();
+
 const revealMap = {
   "bubble-xiaohong": {
     body: [".bubble-xiaohong-bg"],
@@ -431,6 +439,7 @@ function closePopups() {
 }
 
 window.addEventListener("load", () => {
+  lockViewportHeight();
   centerPortraitStage();
   const warmUp = () => {
     preloadInteractiveAssets();
@@ -444,7 +453,10 @@ window.addEventListener("load", () => {
 }, { once: true });
 
 window.addEventListener("orientationchange", () => {
-  window.requestAnimationFrame(centerPortraitStage);
+  window.setTimeout(() => {
+    lockViewportHeight();
+    centerPortraitStage();
+  }, 250);
 });
 
 window.addEventListener("pointerdown", () => {
