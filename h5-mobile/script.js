@@ -245,7 +245,7 @@ function clearSequenceTimers() {
   sequenceTimers = [];
 }
 
-function playImageSequence(selectors, stepDelay = 110) {
+function playImageSequence(selectors, stepDelay = 35) {
   clearSequenceTimers();
   selectors.forEach((sel) => {
     const el = document.querySelector(sel);
@@ -351,20 +351,20 @@ function trigger(action) {
       show(body[0]);
       window.setTimeout(() => {
         playActionAudio(action);
-        playImageSequence(bubbleXiaohongSequence, 90);
+        playImageSequence(bubbleXiaohongSequence);
       }, 220);
     }, 500);
   } else if (action === "bubble-right") {
     show(body[0]);
     window.setTimeout(() => {
       playActionAudio(action);
-      playImageSequence(bubbleRightSequence, 90);
+      playImageSequence(bubbleRightSequence);
     }, 220);
   } else if (action === "bubble-boy") {
     show(body[0]);
     window.setTimeout(() => {
       playActionAudio(action);
-      playImageSequence(bubbleBoySequence, 90);
+      playImageSequence(bubbleBoySequence);
     }, 220);
   } else if (body.length === 2) {
     show(body[0]);
