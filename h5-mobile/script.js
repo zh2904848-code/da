@@ -7,8 +7,8 @@ let currentAudio = null;
 let actionAudio = null;
 let backgroundAudio = null;
 let backgroundStarted = false;
-const backgroundVolume = 0.10;
-const duckedBackgroundVolume = 0.03;
+const backgroundVolume = 0.05;
+const duckedBackgroundVolume = 0.015;
 
 function lockViewportHeight() {
   const height = window.visualViewport?.height || window.innerHeight;
