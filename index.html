@@ -7,7 +7,17 @@
     <link rel="preload" href="./23/bg_classroom.webp" as="image" />
     <link rel="stylesheet" href="./styles.css?v=6" />
   </head>
-  <body>
+  <body class="is-gated">
+    <div class="experience-gate" id="experience-gate" role="dialog" aria-label="横屏体验入口">
+      <div class="gate-panel">
+        <div class="gate-device" aria-hidden="true">
+          <span></span>
+        </div>
+        <h1>横屏互动体验</h1>
+        <p>点击开始后，页面会自动适配当前手机可视区域。</p>
+        <button id="btn-enter-experience" class="gate-button" type="button">开始体验</button>
+      </div>
+    </div>
     <main class="app" aria-label="校园互动场景">
       <section class="stage-shell">
         <div class="stage" id="stage">
@@ -94,6 +104,6 @@
         </div>
       </section>
     </main>
-    <script src="./script.js?v=22"></script>
+    <script src="./script.js?v=23"></script>
   </body>
   </html>
