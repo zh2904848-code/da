@@ -7,8 +7,10 @@ let currentAudio = null;
 let actionAudio = null;
 let backgroundAudio = null;
 let backgroundStarted = false;
+let loadingAction = null;
 const backgroundVolume = 0.02;
 const duckedBackgroundVolume = 0.005;
+const imageGroupPromises = new Map();
 
 function lockViewportHeight() {
   const height = window.visualViewport?.height || window.innerHeight;
@@ -119,6 +121,17 @@ const bubbleBoySequence = [
   ".bubble-boy-step-38",
 ];
 
+const imageGroupMap = {
+  "bubble-xiaohong": [".bubble-xiaohong-bg", ...bubbleXiaohongSequence],
+  "bubble-right": [".bubble-right-bg", ...bubbleRightSequence],
+  "bubble-boy": [".bubble-boy-bg", ...bubbleBoySequence],
+  "new-image": [".reveal-new"],
+  bag: [".reveal-bag"],
+  phone: [".ui-phone-chat"],
+  scroll: [".scroll-opened", ".ui-panel-question-text"],
+  erase: [".effect-mist", ".effect-hands", ".base-doodle"],
+  summary: [".summary-1"],
+};
 const audioFileMap = {
   "bubble-right": "voice-help.mp3",
   "bubble-xiaohong": "voice-why.mp3",
@@ -174,6 +187,7 @@ function warmInteractiveAudios() {
 
 function preloadInteractiveAssets() {
   warmInteractiveAudios();
+  scheduleImageGroupPreload(flowOrder[0]);
 }
 
 function warmIdleImages() {
@@ -187,9 +201,50 @@ function warmIdleImages() {
 }
 
 function loadLazyImage(el) {
-  if (!el || !el.dataset?.src || el.src) return;
-  el.src = el.dataset.src;
-  warmImageElement(el);
+  if (!el) return Promise.resolve();
+  if (!el.src && el.dataset?.src) {
+    el.src = el.dataset.src;
+  }
+  if (!el.src) return Promise.resolve();
+  if (el.complete && el.naturalWidth > 0) {
+    return el.decode?.().catch(() => {}) || Promise.resolve();
+  }
+  return new Promise((resolve) => {
+    const done = () => {
+      el.decode?.().catch(() => {}).finally(resolve);
+    };
+    el.addEventListener("load", done, { once: true });
+    el.addEventListener("error", resolve, { once: true });
+  });
+}
+
+function preloadImageSelectors(selectors = []) {
+  const elements = selectors.flatMap((sel) => Array.from(document.querySelectorAll(sel)));
+  return Promise.all(elements.map(loadLazyImage));
+}
+
+function preloadImageGroup(action) {
+  const selectors = imageGroupMap[action] || revealMap[action]?.body || [];
+  if (!selectors.length) return Promise.resolve();
+  if (!imageGroupPromises.has(action)) {
+    imageGroupPromises.set(action, preloadImageSelectors(selectors));
+  }
+  return imageGroupPromises.get(action);
+}
+
+function scheduleImageGroupPreload(action) {
+  if (!action || imageGroupPromises.has(action)) return;
+  const run = () => preloadImageGroup(action);
+  if ("requestIdleCallback" in window) {
+    window.requestIdleCallback(run, { timeout: 1600 });
+  } else {
+    window.setTimeout(run, 350);
+  }
+}
+
+function preloadNextAction(action) {
+  const index = flowOrder.indexOf(action);
+  if (index >= 0) scheduleImageGroupPreload(flowOrder[index + 1]);
 }
 
 function startBackgroundAudio() {
@@ -316,13 +371,19 @@ function updateClueCounter() {
   }
 }
 
-function trigger(action) {
+async function trigger(action) {
   if (activeAction === action) {
     closePopups();
     return;
   }
   const item = revealMap[action];
   if (!item) return;
+  if (loadingAction) return;
+  loadingAction = action;
+  flashHotspot(action);
+  await preloadImageGroup(action);
+  if (loadingAction !== action) return;
+  loadingAction = null;
   item.stop?.forEach((sel) => loadLazyImage(document.querySelector(sel)));
   if (!shown.has(action)) {
     shown.add(action);
@@ -381,6 +442,8 @@ function trigger(action) {
     activeAction = "summary-1-shown";
     show(".summary-1");
   }
+}
+  preloadNextAction(action);
 }
 
 stage.addEventListener("pointerdown", (event) => {
