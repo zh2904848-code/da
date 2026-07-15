@@ -25,92 +25,6 @@ html, body {
   overflow: hidden;
 }
 
-.is-gated .app {
-  pointer-events: none;
-}
-
-.experience-gate {
-  position: fixed;
-  inset: 0;
-  z-index: 2000;
-  display: grid;
-  place-items: center;
-  padding: max(18px, env(safe-area-inset-top)) 18px max(18px, env(safe-area-inset-bottom));
-  background:
-    linear-gradient(rgba(255,255,255,.72), rgba(255,255,255,.72)),
-    url("./23/bg_classroom.webp") center / cover no-repeat;
-  transition: opacity 220ms ease, visibility 220ms ease;
-}
-
-.experience-gate::before {
-  content: "";
-  position: absolute;
-  inset: -18px;
-  background: inherit;
-  filter: blur(18px);
-  transform: scale(1.04);
-}
-
-.gate-panel {
-  position: relative;
-  width: min(360px, 86vw);
-  padding: 28px 24px 24px;
-  border-radius: 18px;
-  background: rgba(255,255,255,.86);
-  box-shadow: 0 16px 40px rgba(46, 36, 25, .18);
-  text-align: center;
-  color: #25211d;
-}
-
-.gate-device {
-  width: 98px;
-  height: 58px;
-  margin: 0 auto 18px;
-  border: 4px solid #24201c;
-  border-radius: 12px;
-  display: grid;
-  place-items: center;
-}
-
-.gate-device span {
-  width: 30px;
-  height: 6px;
-  border-radius: 999px;
-  background: #24201c;
-}
-
-.gate-panel h1 {
-  margin: 0 0 10px;
-  font-size: 24px;
-  line-height: 1.2;
-  letter-spacing: 0;
-}
-
-.gate-panel p {
-  margin: 0 0 20px;
-  font-size: 15px;
-  line-height: 1.6;
-  color: #5b544d;
-}
-
-.gate-button {
-  width: 100%;
-  height: 46px;
-  border: 0;
-  border-radius: 999px;
-  background: #24201c;
-  color: #fff;
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: 0;
-}
-
-body:not(.is-gated) .experience-gate {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-
 .app::before {
   content: "";
   position: fixed;
@@ -188,7 +102,6 @@ body:not(.is-gated) .experience-gate {
   height: var(--stage-h);
   transform: translate(-50%, -50%) scale(var(--scene-scale));
   transform-origin: center;
-  will-change: transform;
   contain: layout paint;
 }
 
@@ -274,8 +187,6 @@ body:not(.is-gated) .experience-gate {
   object-fit: fill;
   pointer-events: none;
   user-select: none;
-  backface-visibility: hidden;
-  transform: translateZ(0);
 }
 
 .bg-layer { z-index: 10; }
@@ -291,7 +202,7 @@ body:not(.is-gated) .experience-gate {
 .char-girl-short-hair { z-index: 80; animation: side-sway 3.4s ease-in-out infinite; animation-delay: -.9s; will-change: transform; transform-origin: bottom center; }
 .char-observer { z-index: 25; opacity: 0.68; animation: float 4.4s ease-in-out infinite; will-change: transform; transform-origin: bottom center; }
 .prop-backpack-gray { z-index: 125; }
-.ui-phone-chat, .ui-panel-question-text,
+.ui-phone-chat, .ui-panel-question-text, .scroll-opened,
 .reveal-new, .reveal-bag,
 .bubble-xiaohong-bg, .bubble-xiaohong-seq,
 .bubble-right-bg, .bubble-right-seq,
@@ -299,10 +210,14 @@ body:not(.is-gated) .experience-gate {
 .effect-mist, .effect-hands,
 .summary-1 {
   opacity: 0;
+  visibility: hidden;
   transition: opacity 260ms ease, transform 320ms ease;
 }
 
-.is-visible { opacity: 1 !important; }
+.is-visible {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
 .is-frozen { animation: none !important; }
 
 .ui-phone-chat { z-index: 200; }
