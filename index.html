@@ -4,8 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>校园轻交互</title>
-    <link rel="preload" href="./23/bg_classroom.webp?v=2" as="image" />
-    <link rel="stylesheet" href="./styles.css?v=8" />
+    <link rel="preload" href="./23/mobile/bg_classroom.webp?v=3" as="image" media="(max-width: 900px)" />
+    <link rel="preload" href="./23/bg_classroom.webp?v=2" as="image" media="(min-width: 901px)" />
+    <link rel="stylesheet" href="./styles.css?v=9" />
   </head>
   <body>
     <main class="app" aria-label="校园互动场景">
@@ -16,7 +17,10 @@
           </div>
           <button id="btn-summary" class="btn-summary" aria-label="查看总结">📖</button>
 
-          <img class="layer bg-layer" src="./23/bg_classroom.webp?v=2" alt="" draggable="false"  style="left: 0%; top: 0%; width: 100%; height: 100%;" />
+          <picture>
+            <source media="(max-width: 900px)" srcset="./23/mobile/bg_classroom.webp?v=3" />
+            <img class="layer bg-layer" src="./23/bg_classroom.webp?v=2" alt="" draggable="false"  style="left: 0%; top: 0%; width: 100%; height: 100%;" />
+          </picture>
           <img class="layer prop-calendar" src="./23/prop_calendar.webp?v=2" alt="" draggable="false"  style="left: 23.111111%; top: 10.062893%; width: 11%; height: 24.977538%;" />
           <img class="layer prop-desks" src="./23/prop_desks.webp?v=2" alt="" draggable="false"  style="left: 16.944444%; top: 63.971249%; width: 39.277778%; height: 36.028751%;" />
           <img class="layer prop-backpack-gray" src="./23/prop_backpack_gray.webp?v=2" alt="" draggable="false"  style="left: 40%; top: 79.514825%; width: 8.222222%; height: 17.879605%;" />
@@ -29,11 +33,23 @@
           <img class="layer char-girl-short-hair" src="./23/char_girl_short_hair.webp?v=2" alt="" draggable="false"  style="left: 83.055556%; top: 40.431267%; width: 7.222222%; height: 43.755615%; transform-origin: -457.692308% 136.139630%; --motion-x: 0.553846%; --motion-y: -0.034281%;" />
           <img class="layer char-observer" src="./23/char_observer.webp?v=2" alt="" draggable="false"  style="left: 5.111111%; top: 34.950584%; width: 32.777778%; height: 45.462713%; transform-origin: 136.949153% 143.083004%; --motion-float-y: -0.439921%;" />
 
-          <img class="layer summary summary-1" data-src="./23/summary_1.webp?v=2" alt="" draggable="false"  style="left: 0%; top: 0%; width: 100%; height: 100%;" />
-          <img class="layer reveal reveal-new" data-src="./23/4aff9d6016ca1f5761d8b5b74b927b1f.webp?v=2" alt="" draggable="false"  style="left: 0%; top: 0%; width: 100%; height: 100%;" />
-          <img class="layer reveal reveal-bag" data-src="./23/35530610fc2b29805b03dbd96a7f0381.webp?v=2" alt="" draggable="false"  style="left: 0%; top: 0%; width: 100%; height: 100%;" />
+          <picture>
+            <source media="(max-width: 900px)" data-srcset="./23/mobile/summary_1.webp?v=3" />
+            <img class="layer summary summary-1" data-src="./23/summary_1.webp?v=2" alt="" draggable="false"  style="left: 0%; top: 0%; width: 100%; height: 100%;" />
+          </picture>
+          <picture>
+            <source media="(max-width: 900px)" data-srcset="./23/mobile/4aff9d6016ca1f5761d8b5b74b927b1f.webp?v=3" />
+            <img class="layer reveal reveal-new" data-src="./23/4aff9d6016ca1f5761d8b5b74b927b1f.webp?v=2" alt="" draggable="false"  style="left: 0%; top: 0%; width: 100%; height: 100%;" />
+          </picture>
+          <picture>
+            <source media="(max-width: 900px)" data-srcset="./23/mobile/35530610fc2b29805b03dbd96a7f0381.webp?v=3" />
+            <img class="layer reveal reveal-bag" data-src="./23/35530610fc2b29805b03dbd96a7f0381.webp?v=2" alt="" draggable="false"  style="left: 0%; top: 0%; width: 100%; height: 100%;" />
+          </picture>
 
-          <img class="layer reveal reveal-phone ui-phone-chat" data-src="./23/ui_phone_chat.webp?v=2" alt="" draggable="false"  style="left: 0%; top: 0%; width: 100%; height: 100%;" />
+          <picture>
+            <source media="(max-width: 900px)" data-srcset="./23/mobile/ui_phone_chat.webp?v=3" />
+            <img class="layer reveal reveal-phone ui-phone-chat" data-src="./23/ui_phone_chat.webp?v=2" alt="" draggable="false"  style="left: 0%; top: 0%; width: 100%; height: 100%;" />
+          </picture>
           <img class="layer ui-panel-question-text" data-src="./23/ui_panel_question_text.webp?v=2" alt="" draggable="false"  style="left: 0.722222%; top: 1.437556%; width: 12%; height: 50.134771%; transform-origin: 410.648148% -2.867384%;" />
           <img class="layer bubble-layer bubble-xiaohong-bg" data-src="./23/bubble_xiaohong_bg.webp?v=2" alt="" draggable="false"  style="left: 53%; top: 33.513028%; width: 12.5%; height: 13.477089%;" />
           <img class="layer bubble-layer bubble-xiaohong-seq bubble-xiaohong-step-10" data-src="./23/10.webp?v=2" alt="" draggable="false"  style="left: 55.833333%; top: 37.915544%; width: 1.777778%; height: 2.96496%;" />
@@ -78,7 +94,10 @@
           <img class="layer bubble-layer bubble-boy-seq bubble-boy-step-38" data-src="./23/38.webp?v=2" alt="" draggable="false"  style="left: 19.222222%; top: 48.51752%; width: 1.5%; height: 2.425876%;" />
 
           <img class="layer effect-mist" data-src="./22/22/miwu.webp?v=2" alt="" draggable="false"  style="left: 39.944444%; top: 70.080863%; width: 13.555556%; height: 8.176101%;" />
-          <img class="layer effect-hands" data-src="./23/effect_handwriting-2.webp?v=2" alt="" draggable="false"  style="left: 0%; top: 0%; width: 100%; height: 100%;" />
+          <picture>
+            <source media="(max-width: 900px)" data-srcset="./23/mobile/effect_handwriting-2.webp?v=3" />
+            <img class="layer effect-hands" data-src="./23/effect_handwriting-2.webp?v=2" alt="" draggable="false"  style="left: 0%; top: 0%; width: 100%; height: 100%;" />
+          </picture>
           <button class="hotspot hotspot-xiaohong" data-action="bubble-xiaohong" type="button" aria-label="查看小红对话"></button>
           <button class="hotspot hotspot-girl-short" data-action="bubble-right" type="button" aria-label="查看右侧短发女孩对话"></button>
           <button class="hotspot hotspot-girl-sitting" data-action="bubble-boy" type="button" aria-label="查看左侧丸子头女孩对话"></button>
@@ -94,6 +113,6 @@
         </div>
       </section>
     </main>
-    <script src="./script.js?v=24"></script>
+    <script src="./script.js?v=25"></script>
   </body>
   </html>

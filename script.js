@@ -1,5 +1,6 @@
 const stage = document.querySelector("#stage");
 const stageShell = document.querySelector(".stage-shell");
+const app = document.querySelector(".app");
 const shown = new Set();
 let activeAction = null;
 let sequenceTimers = [];
@@ -160,6 +161,10 @@ function resolveAudioSource(source) {
 
 function loadLazyImage(el) {
   if (!el) return Promise.resolve();
+  const mobileSource = el.parentElement?.querySelector?.("source[data-srcset]");
+  if (mobileSource && !mobileSource.srcset) {
+    mobileSource.srcset = mobileSource.dataset.srcset;
+  }
   if (!el.getAttribute("src") && el.dataset?.src) {
     el.src = el.dataset.src;
   }
@@ -263,20 +268,28 @@ function releaseLazyImages(selectors = []) {
   selectors.flatMap((sel) => Array.from(document.querySelectorAll(sel))).forEach((el) => {
     el.classList.remove("is-visible");
     if (el.dataset?.src) el.removeAttribute("src");
+    const mobileSource = el.parentElement?.querySelector?.("source[data-srcset]");
+    mobileSource?.removeAttribute("srcset");
+  });
+}
+
+function hideLazyImages(selectors = []) {
+  selectors.flatMap((sel) => Array.from(document.querySelectorAll(sel))).forEach((el) => {
+    el.classList.remove("is-visible");
   });
 }
 
 function releaseActionAssets(action) {
-  releaseLazyImages(activeSequenceSelectors);
+  hideLazyImages(activeSequenceSelectors);
   activeSequenceSelectors = [];
   if (!action) return;
   releaseLazyImages(revealMap[action]?.body || []);
   bodyPreloadPromises.delete(action);
 }
 
-function playImageSequence(action, selectors, stepDelay = 35) {
+async function playImageSequence(action, selectors, stepDelay = 35) {
   clearSequenceTimers();
-  releaseLazyImages(activeSequenceSelectors);
+  hideLazyImages(activeSequenceSelectors);
   activeSequenceSelectors = selectors;
   const runId = sequenceRunId;
   selectors.forEach((sel) => {
@@ -284,14 +297,15 @@ function playImageSequence(action, selectors, stepDelay = 35) {
     if (el) el.classList.remove("is-visible");
   });
 
-  const showNext = async (index) => {
+  await preloadImageSelectors(selectors);
+  if (runId !== sequenceRunId || activeAction !== action) return;
+
+  const showNext = (index) => {
     if (runId !== sequenceRunId || activeAction !== action) return;
     const el = document.querySelector(selectors[index]);
-    await loadLazyImage(el);
-    if (runId !== sequenceRunId || activeAction !== action) return;
     el?.classList.add("is-visible");
     if (index >= selectors.length - 1) return;
-    const timerId = window.setTimeout(() => void showNext(index + 1), stepDelay);
+    const timerId = window.setTimeout(() => showNext(index + 1), stepDelay);
     sequenceTimers.push(timerId);
   };
 
@@ -376,6 +390,7 @@ function trigger(action) {
     updateClueCounter();
   }
   activeAction = action;
+  app?.classList.add("has-active-popup");
   flashHotspot(action);
   
   // Hide hotspots only for specific fullscreen/popup
@@ -474,6 +489,7 @@ window.addEventListener("pointerdown", (event) => {
 function closePopups() {
   const closingAction = activeAction;
   activeAction = null;
+  app?.classList.remove("has-active-popup");
   clearSequenceTimers();
   stopCurrentAudio();
   document.querySelectorAll(".ui-phone-chat, .reveal-new, .reveal-bag, .scroll-opened, .ui-panel-question-text, .bubble-xiaohong-bg, .bubble-xiaohong-seq, .bubble-right-bg, .bubble-right-seq, .bubble-boy-bg, .bubble-boy-seq, .effect-mist, .effect-hands, .base-doodle, .summary-1").forEach((el) => {
@@ -494,7 +510,14 @@ function closePopups() {
 window.addEventListener("load", () => {
   lockViewportHeight();
   centerPortraitStage();
-  const warmUp = () => scheduleActionBodyPreload(flowOrder[0]);
+  const warmUp = () => {
+    scheduleActionBodyPreload(flowOrder[0]);
+    void preloadImageSelectors([
+      ...bubbleRightSequence,
+      ...bubbleXiaohongSequence,
+      ...bubbleBoySequence,
+    ]);
+  };
   if ("requestIdleCallback" in window) {
     window.requestIdleCallback(warmUp, { timeout: 1200 });
   } else {
