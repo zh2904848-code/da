@@ -1,6 +1,5 @@
 const stage = document.querySelector("#stage");
 const stageShell = document.querySelector(".stage-shell");
-const app = document.querySelector(".app");
 const shown = new Set();
 let activeAction = null;
 let sequenceTimers = [];
@@ -25,43 +24,33 @@ lockViewportHeight();
 const revealMap = {
   "bubble-xiaohong": {
     body: [".bubble-xiaohong-bg"],
-    stop: [".char-xiaohong", ".char-xiaohong-2"],
   },
   "bubble-right": {
     body: [".bubble-right-bg"],
-    stop: [".char-girl-short-hair", ".char-girl-ponytail"],
   },
   "bubble-boy": {
     body: [".bubble-boy-bg"],
-    stop: [".char-girl-sitting"],
   },
   "new-image": {
     body: [".reveal-new"],
-    stop: [".reveal-new"],
   },
   bag: {
     body: [".reveal-bag"],
-    stop: [".prop-backpack-gray"],
   },
   phone: {
     body: [".ui-phone-chat"],
-    stop: [".char-boy-sitting"],
   },
   panel: {
     body: [".ui-panel-question-text"],
-    stop: [".prop-calendar"],
   },
   scroll: {
     body: [".scroll-opened"],
-    stop: [".scroll-opened"],
   },
   erase: {
     body: [".effect-mist", ".effect-hands", ".base-doodle"],
-    stop: [".effect-mist", ".effect-hands", ".base-doodle"],
   },
   summary: {
     body: [".summary-1"],
-    stop: [".summary-1"],
   },
 };
 
@@ -233,11 +222,6 @@ function show(sel) {
   }
 }
 
-function stopMotion(sel) {
-  const el = document.querySelector(sel);
-  if (el) el.classList.add("is-frozen");
-}
-
 function pulse(btn) {
   btn.classList.remove("is-pulsed");
   void btn.offsetWidth;
@@ -390,7 +374,6 @@ function trigger(action) {
     updateClueCounter();
   }
   activeAction = action;
-  app?.classList.add("has-active-popup");
   flashHotspot(action);
   
   // Hide hotspots only for specific fullscreen/popup
@@ -399,8 +382,6 @@ function trigger(action) {
     document.querySelectorAll(".hotspot").forEach(btn => btn.style.display = "none");
   }
   
-  item.stop?.forEach(stopMotion);
-
   const body = item.body || [];
   const revealBubble = async (sequence) => {
     await preloadActionBody(action);
@@ -489,7 +470,6 @@ window.addEventListener("pointerdown", (event) => {
 function closePopups() {
   const closingAction = activeAction;
   activeAction = null;
-  app?.classList.remove("has-active-popup");
   clearSequenceTimers();
   stopCurrentAudio();
   document.querySelectorAll(".ui-phone-chat, .reveal-new, .reveal-bag, .scroll-opened, .ui-panel-question-text, .bubble-xiaohong-bg, .bubble-xiaohong-seq, .bubble-right-bg, .bubble-right-seq, .bubble-boy-bg, .bubble-boy-seq, .effect-mist, .effect-hands, .base-doodle, .summary-1").forEach((el) => {

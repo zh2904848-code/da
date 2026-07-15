@@ -25,6 +25,16 @@ html, body {
   overflow: hidden;
 }
 
+.app::before {
+  content: "";
+  position: fixed;
+  inset: -10%;
+  z-index: 0;
+  background: url("./23/bg_classroom_blurred.webp?v=4") center / cover no-repeat;
+  opacity: 0.72;
+  pointer-events: none;
+}
+
 .stage-shell {
   z-index: 1;
   overscroll-behavior: contain;
@@ -36,6 +46,7 @@ html, body {
   right: 1%;
   z-index: 500;
   background: rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: #fff;
   padding: 10px 20px; /* Reduced padding */
   border-radius: 30px; /* Reduced border radius */
@@ -200,20 +211,6 @@ html, body {
   opacity: 1 !important;
   visibility: visible !important;
 }
-.is-frozen { animation: none !important; }
-
-.app.has-active-popup .char-girl-sitting,
-.app.has-active-popup .char-boy-sitting,
-.app.has-active-popup .char-xiaohong,
-.app.has-active-popup .char-xiaohong-2,
-.app.has-active-popup .char-girl-ponytail,
-.app.has-active-popup .char-girl-short-hair,
-.app.has-active-popup .char-observer,
-.app.has-active-popup .hotspot::after {
-  animation-play-state: paused;
-  will-change: auto;
-}
-
 .reveal-new,
 .reveal-bag,
 .ui-phone-chat,
@@ -359,22 +356,5 @@ html, body {
   .char-observer,
   .hotspot::after {
     animation: none;
-  }
-}
-
-@media (hover: none), (pointer: coarse) {
-  .char-girl-sitting,
-  .char-boy-sitting,
-  .char-xiaohong,
-  .char-xiaohong-2,
-  .char-girl-ponytail,
-  .char-girl-short-hair,
-  .char-observer {
-    animation: none;
-    will-change: auto;
-  }
-
-  .hotspot::after {
-    animation-duration: 2.4s;
   }
 }
