@@ -211,6 +211,17 @@ html, body {
   opacity: 1 !important;
   visibility: visible !important;
 }
+
+.app.has-active-popup .char-girl-sitting,
+.app.has-active-popup .char-boy-sitting,
+.app.has-active-popup .char-xiaohong,
+.app.has-active-popup .char-xiaohong-2,
+.app.has-active-popup .char-girl-ponytail,
+.app.has-active-popup .char-girl-short-hair,
+.app.has-active-popup .char-observer {
+  animation-play-state: paused;
+}
+
 .reveal-new,
 .reveal-bag,
 .ui-phone-chat,

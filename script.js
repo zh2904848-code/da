@@ -1,5 +1,6 @@
 const stage = document.querySelector("#stage");
 const stageShell = document.querySelector(".stage-shell");
+const app = document.querySelector(".app");
 const shown = new Set();
 let activeAction = null;
 let sequenceTimers = [];
@@ -374,6 +375,7 @@ function trigger(action) {
     updateClueCounter();
   }
   activeAction = action;
+  app?.classList.add("has-active-popup");
   flashHotspot(action);
   
   // Hide hotspots only for specific fullscreen/popup
@@ -470,6 +472,7 @@ window.addEventListener("pointerdown", (event) => {
 function closePopups() {
   const closingAction = activeAction;
   activeAction = null;
+  app?.classList.remove("has-active-popup");
   clearSequenceTimers();
   stopCurrentAudio();
   document.querySelectorAll(".ui-phone-chat, .reveal-new, .reveal-bag, .scroll-opened, .ui-panel-question-text, .bubble-xiaohong-bg, .bubble-xiaohong-seq, .bubble-right-bg, .bubble-right-seq, .bubble-boy-bg, .bubble-boy-seq, .effect-mist, .effect-hands, .base-doodle, .summary-1").forEach((el) => {
